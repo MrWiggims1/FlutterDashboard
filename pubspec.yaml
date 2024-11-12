@@ -7,6 +7,7 @@ environment:
   sdk: ^3.5.4
 
 dependencies:
+  duration: ^4.0.3
   flutter:
     sdk: flutter
   http: ^1.2.2
@@ -15,7 +16,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^4.0.0
+  flutter_lints: ^5.0.0
 
 flutter:
   uses-material-design: true

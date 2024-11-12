@@ -8,16 +8,9 @@ class ProductionPosition{
   });
 
   factory ProductionPosition.fromJson(Map<String, dynamic> json){
-    return switch (json){
-      {
-      "positionId": int? positionId,
-      "positionName": String positionName,
-      } =>
-          ProductionPosition(
-            positionId: positionId,
-            positionName: positionName,
-          ),
-      _ => throw const FormatException('Failed to load position.'),
-    };
+    return ProductionPosition(
+        positionId: json["positionId"],
+        positionName: json["positionName"]
+    );
   }
 }

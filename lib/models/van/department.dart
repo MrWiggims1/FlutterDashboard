@@ -17,20 +17,32 @@ class Department{
   });
 
   factory Department.fromJson(Map<String, dynamic> json){
-    return switch(json){
-      {
-        'name': String name,
-        'jobCards': List<JobCard> jobCards,
-        'redCards': List<RedCard> redCards,
-        'yellowCards': List<YellowCard> yellowCards
-      } =>
-        Department(
-          name: name,
-          jobCards: jobCards,
-          redCards: redCards,
-          yellowCards: yellowCards
-        ),
-      _ =>throw const FormatException('Failed to load department.'),
-    };
+    var _jobs = <JobCard>[];
+    if(json["jobCards"] != null) {
+      json["jobCards"].forEach((card) {
+        _jobs.add(JobCard.fromJson(card));
+      });
+    }
+
+    var _reds = <RedCard>[];
+    if(json["redCards"] != null) {
+      json["redCards"].forEach((card) {
+        _reds.add(RedCard.fromJson(card));
+      });
+    }
+
+    var _yellows = <YellowCard>[];
+    if(json["yellowCards"] != null) {
+      json["yellowCards"].forEach((card) {
+        _yellows.add(YellowCard.fromJson(card));
+      });
+    }
+
+    return Department(
+        name: json["name"],
+        jobCards: _jobs,
+        redCards: _reds,
+        yellowCards: _yellows
+    );
   }
 }

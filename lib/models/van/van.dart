@@ -23,27 +23,39 @@ class Van{
     required this.positionHistory
   });
 
-  factory Van.fromJson(Map<String, dynamic> json){
-    return switch(json){
-    {
-      'id': String id,
-      'name': String name,
-      'url': String url,
-      'departments': List<Department> departments,
-      'unallocatedRedCards': List<RedCard> unallocatedRedCards,
-      'handover': DateTime? handover,
-      'positionHistory': Map<DateTime, ProductionPosition> positionHistory,
-    } =>
-      Van(
-        id: id,
-        name: name,
-        url: url,
-        departments: departments,
-        unallocatedRedCards: unallocatedRedCards,
-        handover: handover,
-        positionHistory: positionHistory,
-      ),
-      _ => throw const FormatException('Failed to load van.'),
-    };
+  factory Van.fromJson(Map<String, dynamic> json)
+  {
+    var _deps = <Department>[];
+    if(json["departments"] != null) {
+      json["departments"].forEach((dep) {
+        _deps.add(Department.fromJson(dep));
+      });
+    }
+
+    var _posHist = <DateTime, ProductionPosition>{};
+    if(json["positionHistory"] != null) {
+      Map<DateTime, dynamic> posHMap =
+          json["positionHistory"] as Map<DateTime, dynamic>;
+      posHMap.keys.forEach((posKey) {
+        _posHist[posKey] = ProductionPosition.fromJson(posHMap[posKey]);
+      });
+    }
+
+    var _unallocRedCards = <RedCard>[];
+    if(json["unallocatedRedCards"] != null) {
+      json["unallocatedRedCards"].forEach((card) {
+        _unallocRedCards.add(RedCard.fromJson(card));
+      });
+    }
+
+    return Van(
+      id: json["id"],
+      name: json["name"],
+      url : json["url"],
+      handover: json["handover"],
+      departments: _deps,
+      positionHistory: _posHist,
+      unallocatedRedCards: _unallocRedCards
+    );
   }
 }

@@ -12,18 +12,10 @@ class Comment{
   });
 
   factory Comment.fromJson(Map<String, dynamic> json){
-    return switch (json){
-      {
-        "fullName": DateTime creationDate,
-        "trelloMember": TrelloMember trelloMember,
-        "content": String content,
-      } =>
-        Comment(
-          creationDate: creationDate,
-          trelloMember: trelloMember,
-          content: content
-        ),
-      _ => throw const FormatException('Failed to load Comment.'),
-    };
+    return Comment(
+        creationDate: json["creationDate"],
+        trelloMember: TrelloMember.fromJson(json["trelloMember"]),
+        content: json["content"]
+    );
   }
 }

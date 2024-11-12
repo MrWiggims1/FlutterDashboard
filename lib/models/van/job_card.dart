@@ -1,12 +1,13 @@
+import '../Enums/enum_utils.dart';
 import '../Enums/card_status.dart';
 import '../Enums/due_status.dart';
 import '../production_position.dart';
-import '../Enums/area_of_orgin.dart';
 import '../trello_member.dart';
 import 'attachment_info.dart';
 import 'card.dart';
 import 'checklist.dart';
 import 'comment.dart';
+import 'package:duration/duration.dart';
 
 class JobCard extends Card{
   final ProductionPosition position;
@@ -60,39 +61,49 @@ class JobCard extends Card{
   });
 
   factory JobCard.fromJson(Map<String, dynamic> json){
-    return switch(json){
-      {
-        'id': String id,
-        'name': String name,
-        'url': String url,
-        'areaOfOrigin': AreaOfOrigin areaOfOrigin,
-        'cardStatus': CardStatus cardStatus,
-        'comments': List<Comment> comments,
-        'attachments': List<AttachmentInfo> attachments,
-        'trelloMembers': List<TrelloMember> trelloMembers,
+    var _comments = <Comment>[];
+    if(json["comments"] != null) {
+      (json["comments"] as List<dynamic>).forEach((comment) {
+        _comments.add(Comment.fromJson(comment));
+      });
+    }
 
-        'position': ProductionPosition position,
-        'checklists': List<Checklist> checklists,
-        'dueStatus': DueStatus dueStatus,
-        'taskTime': Duration taskTime
-      } =>
-        JobCard(
-          id: id,
-          name: name,
-          url: url,
-          areaOfOrigin: areaOfOrigin,
-          cardStatus: cardStatus,
-          comments: comments,
-          attachments: attachments,
-          trelloMembers: trelloMembers,
+    var _attachments = <AttachmentInfo>[];
+    if(json["attachments"] != null){
+      for(var item in (json["attachments"] as List<dynamic>)){
+        _attachments.add(AttachmentInfo.fromJson(item));
+      };
+    }
 
-          position: position,
-          checklists: checklists,
-          dueStatus: dueStatus,
-          taskTime: taskTime,
-        ),
-      _ => throw const FormatException('Failed to load yellow card.'),
-    };
+    var _trelloMembers = <TrelloMember>[];
+    if(json["trelloMembers"] != null) {
+      json["trelloMembers"].forEach((member) {
+        _trelloMembers.add(TrelloMember.fromJson(member));
+      });
+    }
+
+    var _checklists = <Checklist>[];
+    if(json["checklists"] != null) {
+      json["checklists"].forEach((checklist) {
+        _checklists.add(Checklist.fromJson(checklist));
+      });
+    }
+
+    return JobCard(
+        id: json["id"],
+        name: json["name"],
+        url: json["url"],
+        areaOfOrigin: EnumUtils.areaOfOriginFromJson(json["areaOfOrigin"]),
+        cardStatus: EnumUtils.cardStatusFromJson(json["cardStatus"]),
+        comments: _comments,
+        attachments: _attachments,
+        trelloMembers: _trelloMembers,
+
+        position: ProductionPosition.fromJson(json["position"]),
+        checklists: _checklists,
+        dueStatus: EnumUtils.dueStatusFromJson(json["dueStatus"]),
+        taskTime: parseDuration(json["taskTime"])
+    );
   }
 }
 

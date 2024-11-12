@@ -1,4 +1,4 @@
-import '../Enums/area_of_orgin.dart';
+import '../Enums/area_of_origin.dart';
 import '../Enums/card_status.dart';
 import '../trello_member.dart';
 import 'attachment_info.dart';

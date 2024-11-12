@@ -6,8 +6,6 @@ import 'models/van/van.dart';
 void main() async{
   runApp(const MainApp());
 
-  await ProductionAccess.GetCheck("671630466e1952a94227e14f");
-
   van = await ProductionAccess.GetVanByName("exp095");
 }
 

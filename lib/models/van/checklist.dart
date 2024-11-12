@@ -25,18 +25,16 @@ class Checklist {
   });
 
   factory Checklist.fromJson(Map<String, dynamic> json){
-    return switch (json) {
-      {
-        'id': String id,
-        'name': String name,
-        'checks': List<Check> checks,
-      } =>
-        Checklist(
-          id: id,
-          name: name,
-          checks: checks,
-        ),
-      _ => throw const FormatException('Failed to load checklist.'),
-    };
+    var _checks = <Check>[];
+    if(json["checks"] != null) {
+      json["checks"].forEach((check) {
+        _checks.add(Check.fromJson(check));
+      });
+    }
+
+    return Checklist(
+        id: json["id"],
+        name: json["name"],
+        checks: _checks);
   }
 }

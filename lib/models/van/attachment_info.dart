@@ -13,18 +13,11 @@ class AttachmentInfo{
   });
 
   factory AttachmentInfo.fromJson(Map<String, dynamic> json){
-    return switch (json){
-      {
-        "id": String id,
-        "url": String url,
-        "fileName": String fileName,
-      } =>
-        AttachmentInfo(
-            id: id,
-            url: url,
-            fileName: fileName
-        ),
-      _ => throw const FormatException('Failed to load Attachment Info.'),
-    };
+
+    return AttachmentInfo(
+        id: json["id"],
+        url: json["url"],
+        fileName: json["fileName"]
+    );
   }
 }

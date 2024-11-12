@@ -10,18 +10,10 @@ class TrelloMember{
   });
 
   factory TrelloMember.fromJson(Map<String, dynamic> json){
-    return switch (json){
-      {
-        "fullName": String fullName,
-        "userName": String userName,
-        "avatarUrl": String avatarUrl,
-      } =>
-          TrelloMember(
-            fullName: fullName,
-            userName: userName,
-            avatarUrl: avatarUrl
-          ),
-      _ => throw const FormatException('Failed to load trello member.'),
-    };
+    return TrelloMember(
+        fullName: json["fullName"],
+        userName: json["userName"],
+        avatarUrl: json["avatarUrl"]
+    );
   }
 }

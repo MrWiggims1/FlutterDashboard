@@ -1,5 +1,4 @@
-import '../Enums/area_of_orgin.dart';
-import '../Enums/card_status.dart';
+import '../Enums/enum_utils.dart';
 import '../van/attachment_info.dart';
 import '../trello_member.dart';
 import 'card.dart';
@@ -24,34 +23,39 @@ class YellowCard extends Card{
   });
 
   factory YellowCard.fromJson(Map<String, dynamic> json){
-    return switch(json){
-      {
-        'id': String id,
-        'name': String name,
-        'url': String url,
-        'areaOfOrigin': AreaOfOrigin areaOfOrigin,
-        'cardStatus': CardStatus cardStatus,
-        'comments': List<Comment> comments,
-        'attachments': List<AttachmentInfo> attachments,
-        'trelloMembers': List<TrelloMember> trelloMembers,
+    var _comments = <Comment>[];
+    if(json["comments"] != null) {
+      json["comments"].forEach((comment) {
+        _comments.add(Comment.fromJson(comment));
+      });
+    }
 
-        'partName': String partName,
-        'creationDate': DateTime creationDate
-      } =>
-        YellowCard(
-          id: id,
-          name: name,
-          url: url,
-          areaOfOrigin: areaOfOrigin,
-          cardStatus: cardStatus,
-          comments: comments,
-          attachments: attachments,
-          trelloMembers: trelloMembers,
+    var _attachments = <AttachmentInfo>[];
+    if(json["attachments"] != null) {
+      json["attachments"].forEach((info) {
+        _attachments.add(AttachmentInfo.fromJson(info));
+      });
+    }
 
-          partName: partName,
-          creationDate: creationDate
-        ),
-      _ => throw const FormatException('Failed to load yellow card.'),
-    };
+    var _trelloMembers = <TrelloMember>[];
+    if(json["trelloMembers"] != null) {
+      json["trelloMembers"].forEach((member) {
+        _trelloMembers.add(TrelloMember.fromJson(member));
+      });
+    }
+
+    return YellowCard(
+        id: json["id"],
+        name: json["name"],
+        url: json["url"],
+        areaOfOrigin: EnumUtils.areaOfOriginFromJson(json["areaOfOrigin"]),
+        cardStatus: EnumUtils.cardStatusFromJson(json["cardStatus"]),
+        comments: _comments,
+        attachments: _attachments,
+        trelloMembers: _trelloMembers,
+
+        partName: json["partName"],
+        creationDate: json["creationDate"]
+    );
   }
 }
